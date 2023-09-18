@@ -5,8 +5,8 @@ import com.example.demo.exception.ApiException;
 
 public interface FoodService {
 
-    void saveTransaction() throws ApiException;
+  void saveTransaction() throws ApiException;
 
-    void saveTransaction(Food food) throws ApiException;
+  void saveTransaction(Food food) throws ApiException;
 
 }
