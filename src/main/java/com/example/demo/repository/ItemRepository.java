@@ -1,15 +1,16 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Item;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import com.example.demo.entity.Item;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
-    Item findByName(String name);
+  Item findByName(String name);
 
-    List<Item> findAllByName(String name);
+  List<Item> findAllByName(String name);
 
 }
