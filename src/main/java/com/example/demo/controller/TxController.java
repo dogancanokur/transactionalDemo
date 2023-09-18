@@ -5,7 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.demo.entity.Item;
+import com.example.demo.exception.ApiException;
+import com.example.demo.output.TestOutput;
 import com.example.demo.service.TestService;
 
 @Controller
@@ -19,16 +20,13 @@ public class TxController {
 
   @GetMapping("/tx")
   public ResponseEntity<?> testTransactional() {
-    Item item = new Item();
-    item.setName("test test");
-    item.setDescription("testDesc");
     try {
-      service.txTestFirstCall();
-
+      TestOutput testOutput = service.txTestFirstCall();
+      return ResponseEntity.ok().body(testOutput);
+    } catch (ApiException e) {
+      return ResponseEntity.badRequest().body(e.getObject());
     } catch (Exception e) {
-      // System.out.println("Exception: " + e.getMessage());
+      throw new RuntimeException(e);
     }
-    return ResponseEntity.ok().build();
   }
-
 }

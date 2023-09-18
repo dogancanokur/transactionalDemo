@@ -26,13 +26,21 @@ public class FoodServiceImpl implements FoodService {
     Food food = new Food();
     food.setName("test");
     food.setDescription("test");
+
+    if (true) {
+      throw new ApiException("saveTransaction api exception ", new Food());
+    }
+
     saveTransaction(food);
   }
 
-  @Override
-  public void saveTransaction(Food food) throws ApiException {
+  private void saveTransaction(Food food) {
+    // try {
+    // Transactional işlemler burada gerçekleştirilir
     foodRepository.save(food);
-    // throw new ApiException("test");
-
+    // } catch (Exception e) {
+    // TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+    // throw e;
+    // }
   }
 }

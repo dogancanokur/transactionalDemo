@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.exception.ApiException;
+import com.example.demo.output.TestOutput;
 import com.example.demo.service.BeverageService;
 import com.example.demo.service.FoodService;
 import com.example.demo.service.ItemService;
@@ -25,23 +26,23 @@ public class TxServiceImpl implements TestService {
   }
 
   @Override
-  @Transactional(propagation = Propagation.REQUIRED)
-  public void txTestFirstCall() throws Exception {
-    // try{
+  @Transactional(propagation = Propagation.REQUIRED, rollbackFor = { ApiException.class })
+  public TestOutput txTestFirstCall() throws ApiException {
 
-    txTestSecondCall();
-    // }catch (Exception e){
-    // System.out.println("Exception: " + e.getMessage());
-    // }
+    return txTestSecondCall();
   }
 
-  private void txTestSecondCall() throws Exception {
+  private TestOutput txTestSecondCall() throws ApiException {
     itemService.save();
+
     try {
       foodService.saveTransaction();
     } catch (ApiException e) {
-      System.out.println("Exception: " + e.getMessage());
+      TestOutput testOutput = new TestOutput(e.getMessage(), e.getObject());
+      // return testOutput;
+      throw new ApiException(e.getMessage(), testOutput);
     }
     beverageService.save();
+    return new TestOutput("method ok", null);
   }
 }
